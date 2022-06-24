@@ -1,25 +1,39 @@
-import logo from './logo.svg';
-import './App.css';
+import { useState } from "react";
+import "./App.css";
+import Card from "./components/Card";
+import { userData } from "./data";
 
-function App() {
+const App = () => {
+  const [userDatas, setUserDatas] = useState(userData);
+  const inputStyle = {
+    padding: 10,
+    width: "30%",
+    fontSize: "22px",
+  };
+  const onSearchHandleChange = (value) => {
+    const newData = userData.filter(
+      (user) =>
+        // user.name.toLocaleLowerCase().includes(value.toLocaleLowerCase())  // only name search
+
+        user.name.toLocaleLowerCase().includes(value.toLocaleLowerCase()) ||
+        user.order.includes(value) // multiply search
+    );
+    setUserDatas(newData);
+  };
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <h1>User Data</h1>
+      <input
+        type="search"
+        placeholder="Serach...."
+        style={inputStyle}
+        onChange={(e) => onSearchHandleChange(e.target.value)}
+      />
+      {userDatas.map((user, index) => (
+        <Card key={index} user={user} />
+      ))}
     </div>
   );
-}
+};
 
 export default App;
